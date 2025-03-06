@@ -6,7 +6,7 @@ on:
             - "*"
 
 env:
-    PLUGIN_NAME: obsidian-ytranscript
+    PLUGIN_NAME: yt-summarizer
 
 jobs:
     build:
