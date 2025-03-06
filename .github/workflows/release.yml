@@ -1,7 +1,9 @@
 name: Release Obsidian plugin
 
-on: [push]
-
+on:
+    push:
+        tags:
+            - "*"
 
 env:
     PLUGIN_NAME: yt-summarizer
