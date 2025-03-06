@@ -103,19 +103,19 @@ export default class YTranscriptPlugin extends Plugin {
 
 	async createNewPageWithTranscript(url: string) {
 		try {
-			// Dosya adını oluştur (geçici başlık)
+			// Create a temporary file name
 			const tempFileName = `YouTube Transcript - Loading...`;
 
-			// Önce boş bir dosya oluştur
+			// First create an empty file
 			const file = await this.app.vault.create(`${tempFileName}.md`, `Loading transcript...\n\n[${url}](${url})`);
 
-			// Dosyayı aç
+			// Open the file
 			const leaf = this.app.workspace.getLeaf(false);
 			await leaf.openFile(file);
 
 			new Notice("Getting transcript...");
 
-			// YouTube transkriptini al
+			// Get YouTube transcript
 			const data = await YoutubeTranscript.fetchTranscript(url, {
 				lang: this.settings.lang,
 				country: this.settings.country,
@@ -127,46 +127,46 @@ export default class YTranscriptPlugin extends Plugin {
 				return;
 			}
 
-			// Gerçek dosya adını oluştur
+			// Create the real file name
 			const fileName = `${data.title.replace(/[\\/:*?"<>|]/g, "_")}.md`;
 
-			// Transkript bloklarını oluştur
+			// Create transcript blocks
 			const blocks = getTranscriptBlocks(data.lines, this.settings.timestampMod);
 
-			// Dosya içeriğini başlat
+			// Initialize file content
 			let content = `[${url}](${url})\n\n`;
 
-			// Dosyayı güncelle (transkript ekleniyor)
+			// Update the file (adding transcript)
 			content += `## Transcript\n\n`;
 			content += `> [!faq]- Transcript Content\n`;
 
-			// Transkript içeriğini ekle
+			// Add transcript content
 			blocks.forEach((block) => {
 				content += `> **[${formatTimestamp(block.quoteTimeOffset)}]** ${block.quote}\n>\n`;
 			});
 
 			await this.app.vault.modify(file, content);
 
-			// Dosya adını güncelle
+			// Update file name
 			await this.app.fileManager.renameFile(file, `${fileName}`);
 
-			// Özet oluştur
+			// Generate summary
 			new Notice("Generating summary...");
 
-			// Özet yükleniyor durumunu göster
+			// Show summary loading status
 			const contentWithLoadingMessage = `[${url}](${url})\n\n## Summary\n\n*Generating summary, please wait...*\n\n${content.substring(content.indexOf("## Transcript"))}`;
 			await this.app.vault.modify(file, contentWithLoadingMessage);
 
-			// Transkript metnini birleştir
+			// Combine transcript text
 			const transcriptText = blocks.map(block => block.quote).join(" ");
 
-			// OpenAI ile özet oluştur
+			// Generate summary with OpenAI
 			const summary = await this.openaiService.generateSummary(transcriptText, data.title);
 
-			// Mevcut içeriği al
+			// Get current content
 			const currentContent = await this.app.vault.read(file);
 
-			// Özeti dosyanın başına ekle
+			// Add summary to the beginning of the file
 			let updatedContent = `[${url}](${url})\n\n`;
 
 			if (summary) {
@@ -176,10 +176,10 @@ export default class YTranscriptPlugin extends Plugin {
 				new Notice("Failed to generate summary!");
 			}
 
-			// Transkript bölümünü ekle
+			// Add transcript section
 			updatedContent += currentContent.substring(currentContent.indexOf("## Transcript"));
 
-			// Dosyayı güncelle
+			// Update the file
 			await this.app.vault.modify(file, updatedContent);
 
 			new Notice("Transcript and summary created!");

@@ -1,19 +1,75 @@
-# Usage
+# YTSummarizer
 
-1. In editor window select link to Youtube video
-2. Choose option YTranscript: Get Youtube transcript from selected url <img width="704" alt="Screenshot 2024-01-03 at 21 59 48" src="https://github.com/lstrzepek/obsidian-yt-transcript/assets/185352/9a0d7fd5-f830-408c-b7d8-73840e7e2d1b">
-3. Transcription will appear in side window with timestamp <img width="1499" alt="Screenshot 2024-01-03 at 22 02 04" src="https://github.com/lstrzepek/obsidian-yt-transcript/assets/185352/1412b043-ffe0-4f56-a448-307afbba1bb7">
-4. In settings you can control how often timestamp should appear (once for every x (default: 32) lines)
-5. Clicking on timestamp opens video in that place
-6. Right click to copy all
-7. You can drag and drop lines of transcription or timestamp link
+An Obsidian plugin that fetches YouTube transcripts and generates summaries using OpenAI GPT models.
 
-![YTranscriptPlugin2](https://user-images.githubusercontent.com/185352/212565518-3afc897a-84f1-479c-b588-cd35dd8b6cd3.gif)
+## Features
 
-# Acknowledgments
+- Fetch transcripts from YouTube videos
+- Generate summaries of video content using OpenAI GPT models
+- View transcripts in the sidebar or create new notes with transcripts and summaries
+- Interactive timestamps that link directly to specific points in the video
+- Customizable timestamp frequency
+- Support for different languages and country codes
+- Configurable OpenAI model selection
+
+## Installation
+
+1. Open Obsidian Settings
+2. Go to Community Plugins and disable Safe Mode
+3. Click on Browse and search for "YTSummarizer"
+4. Install the plugin and enable it
+
+## Usage
+
+### Getting Transcripts
+
+There are multiple ways to get a YouTube transcript:
+
+1. **From the ribbon icon**:
+   - Click the YouTube icon in the left sidebar
+   - Enter the YouTube URL
+   - Choose whether to view in sidebar or create a new note
+
+2. **From selected text**:
+   - Select a YouTube URL in your note
+   - Use the command "YTSummarizer: Get YouTube transcript from selected url"
+   - The transcript will appear in the sidebar
+
+3. **From command palette**:
+   - Open the command palette (Ctrl/Cmd + P)
+   - Search for "YTSummarizer: Get YouTube transcript from url prompt"
+   - Enter the YouTube URL
+   - Choose whether to view in sidebar or create a new note
+
+### Working with Transcripts
+
+- Click on any timestamp to open the video at that specific point
+- In sidebar view, use the "Generate Summary" button to create a summary with OpenAI
+- When creating a new note, the summary is automatically generated and placed at the top
+
+## Configuration
+
+In the plugin settings, you can configure:
+
+- **Timestamp interval**: How often timestamps should appear in the transcript
+- **Language**: Preferred transcript language code (e.g., "en", "fr", "de")
+- **Country**: Preferred transcript country code (e.g., "EN", "FR", "DE")
+- **OpenAI API Key**: Your OpenAI API key for generating summaries
+- **OpenAI Model**: Choose between GPT-4o Mini, GPT-3.5 Turbo, or GPT-4o
+- **Custom Summary Prompt**: Customize the prompt used for generating summaries
+
+## Requirements
+
+- An OpenAI API key is required for the summary generation feature
+
+## Acknowledgments
 
 Many thanks to creators and contributors of following plugins:
 
--   [Auto Link Title](https://github.com/zolrath/obsidian-auto-link-title)
--   [Timestamp Notes](https://github.com/juliang22/ObsidianTimestampNotes)
--   [Recent Files](https://github.com/tgrosinger/recent-files-obsidian)
+- [Auto Link Title](https://github.com/zolrath/obsidian-auto-link-title)
+- [Timestamp Notes](https://github.com/juliang22/ObsidianTimestampNotes)
+- [Recent Files](https://github.com/tgrosinger/recent-files-obsidian)
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
