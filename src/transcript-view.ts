@@ -253,7 +253,8 @@ export class TranscriptView extends ItemView {
 				// Generate summary
 				this.summary = await this.plugin.openaiService.generateSummary(
 					transcriptText,
-					this.videoTitle || "YouTube Video"
+					this.videoTitle || "YouTube Video",
+					this.currentUrl || ""
 				);
 
 				// Show summary

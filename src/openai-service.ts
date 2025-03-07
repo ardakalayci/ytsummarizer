@@ -5,12 +5,14 @@ export interface OpenAISettings {
     apiKey: string;
     model: string;
     customPrompt: string;
+    maxTokens: number;
 }
 
 export const DEFAULT_OPENAI_SETTINGS: OpenAISettings = {
     apiKey: "",
     model: "gpt-4o-mini",
-    customPrompt: "You are an assistant that summarizes YouTube video transcripts. Summarize the given transcript in a concise, clear, and understandable way. Highlight important points and remove unnecessary details."
+    customPrompt: "You are an assistant that summarizes YouTube video transcripts. Summarize the given transcript in a concise, clear, and understandable way. Highlight important points and remove unnecessary details.",
+    maxTokens: 1000
 };
 
 export class OpenAIService {
@@ -46,7 +48,7 @@ export class OpenAIService {
         }
     }
 
-    public async generateSummary(transcript: string, title: string): Promise<string> {
+    public async generateSummary(transcript: string, title: string, url: string): Promise<string> {
         if (!this.openai) {
             throw new Error("OpenAI API key is not set. Please enter your API key in the plugin settings.");
         }
@@ -63,11 +65,11 @@ export class OpenAIService {
                     },
                     {
                         role: "user",
-                        content: `Video Title: ${title}\n\nTranscript:\n${transcript}\n\nPlease summarize this video.`
+                        content: `Video Title: ${title}\n\nTranscript:\n${transcript}\n\nPlease summarize this video. To create links to relevant sections where the user requests, here is the video link: ${url}`
                     }
                 ],
                 temperature: 0.7,
-                max_tokens: 1000
+                max_tokens: this.settings.maxTokens
             });
 
             return response.choices[0]?.message?.content || "Failed to generate summary.";

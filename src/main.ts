@@ -159,10 +159,14 @@ export default class YTranscriptPlugin extends Plugin {
 			await this.app.vault.modify(file, contentWithLoadingMessage);
 
 			// Combine transcript text
-			const transcriptText = blocks.map(block => block.quote).join(" ");
+			let transcriptText = "";
+			blocks.forEach((block) => {
+				transcriptText += `> **[${formatTimestamp(block.quoteTimeOffset)}]** ${block.quote}\n>\n`;
+			});
+			// blocks.map(block => block.quote).join(" ");
 
 			// Generate summary with OpenAI
-			const summary = await this.openaiService.generateSummary(transcriptText, data.title);
+			const summary = await this.openaiService.generateSummary(transcriptText, data.title, url);
 
 			// Get current content
 			const currentContent = await this.app.vault.read(file);
@@ -295,7 +299,6 @@ class YTranslateSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					});
 			});
-
 		new Setting(containerEl)
 			.setName("Custom Summary Prompt")
 			.setDesc("Enter a custom prompt to use when generating summaries. Leave empty to use the default prompt.")
@@ -310,5 +313,22 @@ class YTranslateSettingTab extends PluginSettingTab {
 				textarea.inputEl.rows = 6;
 				textarea.inputEl.cols = 50;
 			});
+		new Setting(containerEl)
+			.setName("Max Tokens")
+			.setDesc("Maximum number of tokens to generate for the summary (1-4000)")
+			.addText((text) =>
+				text
+					.setPlaceholder("2000")
+					.setValue(this.plugin.settings.openai.maxTokens.toString())
+					.onChange(async (value) => {
+						const tokens = Number.parseInt(value);
+						this.plugin.settings.openai.maxTokens = Number.isNaN(tokens) || tokens < 10 || tokens > 10000
+							? 2000
+							: tokens;
+						await this.plugin.saveSettings();
+					}),
+			);
+
+
 	}
 }
