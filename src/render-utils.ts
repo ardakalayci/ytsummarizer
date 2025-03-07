@@ -7,12 +7,43 @@ import { TranscriptBlock } from "./types";
  * @param searchValue - the value that will be highlight
  */
 export const highlightText = (div: HTMLElement, searchValue: string) => {
-	const content = div.innerHTML;
-	const highlightedContent = content.replace(
-		new RegExp(searchValue, "gi"),
-		'<span class="yt-transcript__highlight">$&</span>',
-	);
-	div.innerHTML = highlightedContent;
+	// Clear the div
+	const textContent = div.textContent || "";
+	div.empty();
+
+	if (!searchValue.trim()) {
+		div.setText(textContent);
+		return;
+	}
+
+	const regex = new RegExp(searchValue, "gi");
+	let match;
+	let lastIndex = 0;
+
+	// Split the text by matches and create spans for highlighted parts
+	while ((match = regex.exec(textContent)) !== null) {
+		// Add text before match
+		if (match.index > lastIndex) {
+			div.createSpan({
+				text: textContent.substring(lastIndex, match.index)
+			});
+		}
+
+		// Add highlighted match
+		div.createSpan({
+			text: match[0],
+			cls: "yt-transcript__highlight"
+		});
+
+		lastIndex = regex.lastIndex;
+	}
+
+	// Add remaining text after last match
+	if (lastIndex < textContent.length) {
+		div.createSpan({
+			text: textContent.substring(lastIndex)
+		});
+	}
 };
 
 /**

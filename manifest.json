@@ -10,12 +10,12 @@
 	"commands": [
 		{
 			"id": "transcript-from-text",
-			"name": "Get YouTube transcript from selected url",
+			"name": "Get YouTube transcript from selected url.",
 			"hotkeys": []
 		},
 		{
 			"id": "transcript-from-prompt",
-			"name": "Get YouTube transcript from url prompt",
+			"name": "Get YouTube transcript from url prompt.",
 			"hotkeys": []
 		}
 	]

@@ -128,7 +128,8 @@ export default class YTranscriptPlugin extends Plugin {
 			}
 
 			// Create the real file name
-			const fileName = `${data.title.replace(/[\\/:*?"<>|]/g, "_")}.md`;
+			const randomChars = Math.random().toString(36).substring(2, 6);
+			const fileName = `${data.title.replace(/[\\/:*?"<>|]/g, "_")} #${randomChars}.md`;
 
 			// Create transcript blocks
 			const blocks = getTranscriptBlocks(data.lines, this.settings.timestampMod);
@@ -191,7 +192,7 @@ export default class YTranscriptPlugin extends Plugin {
 	}
 
 	onunload() {
-		this.app.workspace.detachLeavesOfType(TRANSCRIPT_TYPE_VIEW);
+		// Yaprakları ayırmak yerine sadece kaynakları temizle
 	}
 
 	async loadSettings() {

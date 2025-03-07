@@ -1,5 +1,5 @@
 import YTranscriptPlugin from "src/main";
-import { ItemView, WorkspaceLeaf, Menu, Notice, setIcon, ButtonComponent } from "obsidian";
+import { ItemView, WorkspaceLeaf, Menu, Notice, setIcon, ButtonComponent, TextComponent } from "obsidian";
 import {
 	TranscriptResponse,
 	YoutubeTranscript,
@@ -35,6 +35,35 @@ export class TranscriptView extends ItemView {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.createEl("h4", { text: "Transcript" });
+
+		// Loader container
+		this.loaderContainerEl = contentEl.createEl("div", {
+			cls: "yt-transcript__loader-container"
+		});
+
+		// Data container
+		this.dataContainerEl = contentEl.createEl("div", {
+			cls: "yt-transcript__data-container"
+		});
+		this.dataContainerEl.style.display = "none";
+
+		// Error container
+		this.errorContainerEl = contentEl.createEl("div", {
+			cls: "yt-transcript__error-container"
+		});
+		this.errorContainerEl.style.display = "none";
+
+		// Summary container
+		this.summaryContainerEl = contentEl.createEl("div", {
+			cls: "yt-transcript__summary-container"
+		});
+		this.summaryContainerEl.style.display = "none";
+
+		// Set state from leaf
+		const state = this.leaf.getEphemeralState();
+		if (state && state.url) {
+			await this.setEphemeralState(state);
+		}
 	}
 
 	async onClose() {
@@ -49,6 +78,77 @@ export class TranscriptView extends ItemView {
 	private getLeafIndex(): number {
 		const leaves = this.app.workspace.getLeavesOfType(TRANSCRIPT_TYPE_VIEW);
 		return leaves.findIndex((leaf) => leaf === this.leaf);
+	}
+
+	/**
+	 * Loads a transcript from a YouTube URL
+	 * @param url - the YouTube URL
+	 */
+	private async loadTranscript(url: string): Promise<void> {
+		this.currentUrl = url;
+
+		// Clear the content and recreate containers
+		this.contentEl.empty();
+		this.contentEl.createEl("h4", { text: "Transcript" });
+
+		// Recreate containers with proper CSS classes
+		this.loaderContainerEl = this.contentEl.createEl("div", {
+			cls: "yt-transcript__loader-container"
+		});
+
+		this.dataContainerEl = this.contentEl.createEl("div", {
+			cls: "yt-transcript__data-container"
+		});
+		this.dataContainerEl.style.display = "none";
+
+		this.errorContainerEl = this.contentEl.createEl("div", {
+			cls: "yt-transcript__error-container"
+		});
+		this.errorContainerEl.style.display = "none";
+
+		this.summaryContainerEl = this.contentEl.createEl("div", {
+			cls: "yt-transcript__summary-container"
+		});
+		this.summaryContainerEl.style.display = "none";
+
+		// Show loader
+		this.renderLoader();
+
+		try {
+			// Fetch transcript
+			const data = await YoutubeTranscript.fetchTranscript(url, {
+				lang: this.plugin.settings.lang,
+				country: this.plugin.settings.country,
+			});
+
+			this.videoData = [data];
+			this.videoTitle = data.title;
+
+			// Hide loader and show data
+			if (this.loaderContainerEl) this.loaderContainerEl.style.display = "none";
+			if (this.dataContainerEl) {
+				this.dataContainerEl.style.display = "block";
+				this.dataContainerEl.empty();
+
+				// Render video title and transcript
+				this.renderVideoTitle(data.title);
+				this.renderTranscriptionBlocks(
+					url,
+					data,
+					this.plugin.settings.timestampMod,
+					""
+				);
+			}
+		} catch (error) {
+			// Hide loader and show error
+			if (this.loaderContainerEl) this.loaderContainerEl.style.display = "none";
+			if (this.errorContainerEl) {
+				this.errorContainerEl.style.display = "flex";
+				this.errorContainerEl.empty();
+				this.errorContainerEl.createEl("h4", { text: "Error" });
+				this.errorContainerEl.createEl("p", { text: error.message });
+			}
+		}
 	}
 
 	/**
@@ -86,14 +186,14 @@ export class TranscriptView extends ItemView {
 	}
 
 	/**
-	 * Adds a div with the video title to the view content
+	 * Renders the video title
 	 * @param title - the title of the video
 	 */
 	private renderVideoTitle(title: string) {
-		const titleEl = this.contentEl.createEl("div");
-		titleEl.innerHTML = title;
-		titleEl.style.fontWeight = "bold";
-		titleEl.style.marginBottom = "20px";
+		const titleEl = this.contentEl.createEl("div", {
+			text: title,
+			cls: "yt-transcript__video-title"
+		});
 	}
 
 	private formatContentToPaste(url: string, blocks: TranscriptBlock[]) {
@@ -123,74 +223,74 @@ export class TranscriptView extends ItemView {
 		buttonContainer.style.justifyContent = "center";
 
 		const summaryButton = new ButtonComponent(buttonContainer);
-		summaryButton.setButtonText("Özet Çıkar");
-		setIcon(summaryButton.buttonEl, "file-text");
-
+		summaryButton.setButtonText("Generate Summary");
 		summaryButton.onClick(async () => {
-			if (this.isSummaryLoading) {
-				return;
-			}
-
-			if (!this.videoData || !this.videoData[0] || !this.currentUrl) {
-				new Notice("Özet çıkarmak için önce bir transkript yükleyin.");
+			if (!this.videoData || this.videoData.length === 0) {
+				new Notice("Please load a transcript first to generate a summary.");
 				return;
 			}
 
 			this.isSummaryLoading = true;
 
-			// Özet konteynerini oluştur veya temizle
+			// Create or clear summary container
 			if (!this.summaryContainerEl) {
-				this.summaryContainerEl = this.contentEl.createEl("div");
-				this.summaryContainerEl.style.marginTop = "20px";
-				this.summaryContainerEl.style.padding = "15px";
-				this.summaryContainerEl.style.border = "1px solid var(--background-modifier-border)";
-				this.summaryContainerEl.style.borderRadius = "5px";
-				this.summaryContainerEl.style.backgroundColor = "var(--background-secondary)";
+				this.summaryContainerEl = this.contentEl.createEl("div", {
+					cls: "yt-transcript__summary-container"
+				});
 			} else {
 				this.summaryContainerEl.empty();
+				this.summaryContainerEl.style.display = "block";
 			}
 
-			// Yükleniyor mesajını göster
-			this.summaryContainerEl.createEl("p", { text: "Özet oluşturuluyor..." });
+			this.summaryContainerEl.createEl("p", { text: "Generating summary..." });
 
 			try {
-				// Transkripti düz metin olarak hazırla
+				// Prepare transcript as plain text
 				const transcriptText = this.videoData[0].lines
 					.map((line) => line.text)
 					.join(" ");
 
-				// Özeti oluştur
+				// Generate summary
 				this.summary = await this.plugin.openaiService.generateSummary(
 					transcriptText,
-					this.videoData[0].title
+					this.videoTitle || "YouTube Video"
 				);
 
-				// Özeti göster
+				// Show summary
 				this.summaryContainerEl.empty();
-				const titleEl = this.summaryContainerEl.createEl("h4", { text: "Video Özeti" });
-				titleEl.style.marginTop = "0";
-
-				const summaryEl = this.summaryContainerEl.createEl("div");
-				summaryEl.innerHTML = this.summary.replace(/\n/g, "<br>");
-
-				// Kopyalama butonu ekle
-				const copyButtonContainer = this.summaryContainerEl.createEl("div");
-				copyButtonContainer.style.marginTop = "10px";
-				copyButtonContainer.style.display = "flex";
-				copyButtonContainer.style.justifyContent = "flex-end";
-
-				const copyButton = new ButtonComponent(copyButtonContainer);
-				copyButton.setButtonText("Kopyala");
-				setIcon(copyButton.buttonEl, "copy");
-				copyButton.onClick(() => {
-					navigator.clipboard.writeText(this.summary || "");
-					new Notice("Özet panoya kopyalandı!");
+				const titleEl = this.summaryContainerEl.createEl("h4", {
+					text: "Video Summary",
+					cls: "yt-transcript__summary-title"
 				});
 
+				const summaryEl = this.summaryContainerEl.createEl("div");
+
+				// Split newlines into paragraphs
+				const paragraphs = this.summary.split("\n");
+				paragraphs.forEach((paragraph, index) => {
+					if (paragraph.trim()) {
+						summaryEl.createEl("p", { text: paragraph });
+					} else if (index < paragraphs.length - 1) {
+						// Add empty lines as <br> (except for the last empty line)
+						summaryEl.createEl("br");
+					}
+				});
+
+				// Add copy button
+				const copyButtonContainer = this.summaryContainerEl.createEl("div", {
+					cls: "yt-transcript__button-container"
+				});
+
+				const copyButton = new ButtonComponent(copyButtonContainer);
+				copyButton.setButtonText("Copy to Clipboard");
+				copyButton.onClick(() => {
+					navigator.clipboard.writeText(this.summary || "");
+					new Notice("Summary copied to clipboard!");
+				});
 			} catch (error) {
 				this.summaryContainerEl.empty();
 				this.summaryContainerEl.createEl("p", {
-					text: error instanceof Error ? error.message : "Özet oluşturulurken bir hata oluştu."
+					text: error instanceof Error ? error.message : "An error occurred while generating the summary."
 				});
 			} finally {
 				this.isSummaryLoading = false;
@@ -272,10 +372,9 @@ export class TranscriptView extends ItemView {
 				blockContainerEl.addEventListener(
 					"dragstart",
 					(event: DragEvent) => {
-						event.dataTransfer?.setData(
-							"text/html",
-							blockContainerEl.innerHTML,
-						);
+						// Use text content for drag operation
+						const textContent = `${block.quote} (${formatTimestamp(block.quoteTimeOffset)})`;
+						event.dataTransfer?.setData("text/plain", textContent);
 					},
 				);
 
@@ -306,61 +405,23 @@ export class TranscriptView extends ItemView {
 	}
 
 	/**
-	 * Sets the state of the view
-	 * This is called when the view is loaded
+	 * Sets the ephemeral state of the view
+	 * @param state - the state to set
 	 */
 	async setEphemeralState(state: { url: string }): Promise<void> {
 		const { url } = state;
-		this.currentUrl = url;
-
-		this.contentEl.empty();
-		this.contentEl.createEl("h4", { text: "Transcript" });
-
-		this.loaderContainerEl = this.contentEl.createEl("div");
-		this.dataContainerEl = this.contentEl.createEl("div");
-		this.errorContainerEl = this.contentEl.createEl("div");
-
-		this.renderLoader();
-
-		try {
-			const data = await YoutubeTranscript.fetchTranscript(url, {
-				lang: this.plugin.settings.lang,
-				country: this.plugin.settings.country,
-			});
-
-			this.videoData = [data];
-			this.videoTitle = data.title;
-
-			this.loaderContainerEl.empty();
-			this.renderVideoTitle(data.title);
-			this.renderSearchInput(url, data, this.plugin.settings.timestampMod);
-
-			// Özet butonunu ekle
-			this.renderSummaryButton();
-
-			this.renderTranscriptionBlocks(
-				url,
-				data,
-				this.plugin.settings.timestampMod,
-				"",
-			);
-		} catch (err) {
-			this.loaderContainerEl.empty();
-			this.errorContainerEl.createEl("div", {
-				text: err instanceof YoutubeTranscriptError
-					? err.message
-					: "An error occurred while fetching the transcript",
-			});
-		}
+		await this.loadTranscript(url);
 	}
 
-	getViewType(): string {
+	getViewType() {
 		return TRANSCRIPT_TYPE_VIEW;
 	}
-	getDisplayText(): string {
-		return "YouTube Transcript";
+
+	getDisplayText() {
+		return "Transcript";
 	}
-	getIcon(): string {
+
+	getIcon() {
 		return "scroll";
 	}
 }

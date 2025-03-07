@@ -62,6 +62,15 @@ In the plugin settings, you can configure:
 
 - An OpenAI API key is required for the summary generation feature
 
+## Security and Best Practices
+
+This plugin follows Obsidian's security guidelines and best practices:
+
+- Uses DOM API instead of innerHTML for safer content rendering
+- Properly handles resources in the plugin lifecycle
+- Uses CSS classes for styling instead of inline styles
+- Implements proper error handling and user feedback
+
 ## Acknowledgments
 
 Many thanks to creators and contributors of following plugins:

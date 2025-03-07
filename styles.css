@@ -7,19 +7,87 @@ If your plugin does not need CSS, delete this file.
 
 */
 
+/* Transcript blocks */
 .yt-transcript__transcript-block {
 	display: flex;
 	flex-direction: column;
 	margin-bottom: 25px;
 }
 
-.yt-transcript__transcript-block > span {
+.yt-transcript__transcript-block>span {
 	cursor: pointer;
 }
 
+/* Highlight styling */
 .yt-transcript__highlight {
 	background-color: var(--text-highlight-bg);
 	padding: 0 2px;
 	border-radius: 2px;
 	font-weight: bold;
+}
+
+/* Video title styling */
+.yt-transcript__video-title {
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+/* Text input styling */
+.yt-transcript__text-input {
+	width: 100%;
+}
+
+/* Summary title styling */
+.yt-transcript__summary-title {
+	margin-top: 0;
+}
+
+/* Button container styling */
+.yt-transcript__button-container {
+	margin-top: 10px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+/* Search container styling */
+.yt-transcript__search-container {
+	display: flex;
+	margin-bottom: 10px;
+}
+
+/* Search input styling */
+.yt-transcript__search-input {
+	flex-grow: 1;
+	margin-right: 10px;
+}
+
+/* Loader container styling */
+.yt-transcript__loader-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+/* Data container styling */
+.yt-transcript__data-container {
+	height: 100%;
+	overflow-y: auto;
+}
+
+/* Error container styling */
+.yt-transcript__error-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+/* Summary container styling */
+.yt-transcript__summary-container {
+	margin-bottom: 20px;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: var(--background-secondary);
 }

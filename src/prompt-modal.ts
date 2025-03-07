@@ -38,7 +38,7 @@ export class PromptModal extends Modal {
 	createForm(): void {
 		// Input field
 		const textInput = new TextComponent(this.contentEl);
-		textInput.inputEl.style.width = "100%";
+		textInput.inputEl.addClass("yt-transcript__text-input");
 		textInput.onChange((value) => (this.url = value));
 		textInput.inputEl.addEventListener("keydown", (evt: KeyboardEvent) =>
 			this.enterCallback(evt),
@@ -49,17 +49,17 @@ export class PromptModal extends Modal {
 		const buttonDiv = this.modalEl.createDiv();
 		buttonDiv.addClass("modal-button-container");
 
-		// Yan menüde göster butonu
+		// Show in sidebar button
 		const sidebarButton = new ButtonComponent(buttonDiv);
 		sidebarButton.buttonEl.addClass("mod-cta");
-		sidebarButton.setButtonText("Yan Menüde Göster").onClick((evt: Event) => {
+		sidebarButton.setButtonText("Show in Sidebar").onClick((evt: Event) => {
 			this.action = PromptAction.SIDEBAR;
 			this.resolveAndClose(evt);
 		});
 
-		// Yeni sayfa oluştur butonu
+		// Create new page button
 		const newPageButton = new ButtonComponent(buttonDiv);
-		newPageButton.setButtonText("Yeni Sayfa Oluştur").onClick((evt: Event) => {
+		newPageButton.setButtonText("Create New Page").onClick((evt: Event) => {
 			this.action = PromptAction.NEW_PAGE;
 			this.resolveAndClose(evt);
 		});
@@ -67,7 +67,7 @@ export class PromptModal extends Modal {
 
 	private enterCallback(evt: KeyboardEvent) {
 		if (evt.key === "Enter") {
-			this.action = PromptAction.SIDEBAR; // Enter tuşuna basıldığında varsayılan olarak yan menüde göster
+			this.action = PromptAction.SIDEBAR; // Default to sidebar view when Enter key is pressed
 			this.resolveAndClose(evt);
 		}
 	}
