@@ -2,6 +2,8 @@
 
 An Obsidian plugin that fetches YouTube transcripts and generates summaries using OpenAI GPT models.
 
+![YTSummarizer Demo](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/demo.gif)
+
 ## Features
 
 - Fetch transcripts from YouTube videos
@@ -75,9 +77,19 @@ This plugin follows Obsidian's security guidelines and best practices:
 
 Many thanks to creators and contributors of following plugins:
 
+- [YTranscript](https://github.com/lstrzepek/obsidian-yt-transcript) - Bu eklenti, Łukasz Strzępek'in YTranscript eklentisinden büyük ölçüde ilham almıştır ve onun temel işlevselliği üzerine inşa edilmiştir. YTranscript, YouTube transkriptlerini alma ve görüntüleme özelliği sağlarken, YTSummarizer buna ek olarak OpenAI GPT modelleri kullanarak otomatik özet oluşturma özelliği ekler.
 - [Auto Link Title](https://github.com/zolrath/obsidian-auto-link-title)
 - [Timestamp Notes](https://github.com/juliang22/ObsidianTimestampNotes)
 - [Recent Files](https://github.com/tgrosinger/recent-files-obsidian)
+
+## What sets YTSummarizer apart?
+
+Unlike other YouTube-related plugins for Obsidian, YTSummarizer focuses on:
+
+1. **AI-powered summaries**: Automatically generates concise summaries of video content using OpenAI's GPT models
+2. **Flexible viewing options**: View transcripts in the sidebar or create dedicated notes
+3. **Interactive timestamps**: Easily navigate to specific points in videos
+4. **Customizable experience**: Configure timestamp frequency, language preferences, and AI model settings
 
 ## License
 

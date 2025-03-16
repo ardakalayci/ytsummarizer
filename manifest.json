@@ -2,21 +2,9 @@
 	"id": "yt-summarizer",
 	"name": "YTSummarizer",
 	"version": "0.2.1",
-	"minAppVersion": "0.15.0",
-	"description": "A plugin that fetches YouTube transcripts and generates summaries using OpenAI GPT's",
+	"minAppVersion": "1.7.2",
+	"description": "Fetches YouTube transcripts and generates summaries using OpenAI GPT models",
 	"author": "Arda Kalaycı",
 	"authorUrl": "https://github.com/ardakalayci",
-	"isDesktopOnly": false,
-	"commands": [
-		{
-			"id": "transcript-from-text",
-			"name": "Get YouTube transcript from selected url.",
-			"hotkeys": []
-		},
-		{
-			"id": "transcript-from-prompt",
-			"name": "Get YouTube transcript from url prompt.",
-			"hotkeys": []
-		}
-	]
+	"isDesktopOnly": false
 }

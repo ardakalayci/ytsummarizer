@@ -223,7 +223,7 @@ export class TranscriptView extends ItemView {
 		buttonContainer.style.justifyContent = "center";
 
 		const summaryButton = new ButtonComponent(buttonContainer);
-		summaryButton.setButtonText("Generate Summary");
+		summaryButton.setButtonText("Generate summary");
 		summaryButton.onClick(async () => {
 			if (!this.videoData || this.videoData.length === 0) {
 				new Notice("Please load a transcript first to generate a summary.");
@@ -253,14 +253,14 @@ export class TranscriptView extends ItemView {
 				// Generate summary
 				this.summary = await this.plugin.openaiService.generateSummary(
 					transcriptText,
-					this.videoTitle || "YouTube Video",
+					this.videoTitle || "YouTube video",
 					this.currentUrl || ""
 				);
 
 				// Show summary
 				this.summaryContainerEl.empty();
 				const titleEl = this.summaryContainerEl.createEl("h4", {
-					text: "Video Summary",
+					text: "Video summary",
 					cls: "yt-transcript__summary-title"
 				});
 
@@ -283,7 +283,7 @@ export class TranscriptView extends ItemView {
 				});
 
 				const copyButton = new ButtonComponent(copyButtonContainer);
-				copyButton.setButtonText("Copy to Clipboard");
+				copyButton.setButtonText("Copy to clipboard");
 				copyButton.onClick(() => {
 					navigator.clipboard.writeText(this.summary || "");
 					new Notice("Summary copied to clipboard!");

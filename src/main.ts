@@ -122,7 +122,7 @@ export default class YTranscriptPlugin extends Plugin {
 			});
 
 			if (!data || !data.lines) {
-				await this.app.vault.modify(file, `Failed to get transcript!\n\n[${url}](${url})`);
+				await this.app.vault.process(file, (content) => `Failed to get transcript!\n\n[${url}](${url})`);
 				new Notice("Failed to get transcript!");
 				return;
 			}
@@ -146,7 +146,7 @@ export default class YTranscriptPlugin extends Plugin {
 				content += `> **[${formatTimestamp(block.quoteTimeOffset)}]** ${block.quote}\n>\n`;
 			});
 
-			await this.app.vault.modify(file, content);
+			await this.app.vault.process(file, () => content);
 
 			// Update file name
 			await this.app.fileManager.renameFile(file, `${fileName}`);
@@ -156,7 +156,8 @@ export default class YTranscriptPlugin extends Plugin {
 
 			// Show summary loading status
 			const contentWithLoadingMessage = `[${url}](${url})\n\n## Summary\n\n*Generating summary, please wait...*\n\n${content.substring(content.indexOf("## Transcript"))}`;
-			await this.app.vault.modify(file, contentWithLoadingMessage);
+
+			await this.app.vault.process(file, () => contentWithLoadingMessage);
 
 			// Combine transcript text
 			let transcriptText = "";
@@ -185,7 +186,7 @@ export default class YTranscriptPlugin extends Plugin {
 			updatedContent += currentContent.substring(currentContent.indexOf("## Transcript"));
 
 			// Update the file
-			await this.app.vault.modify(file, updatedContent);
+			await this.app.vault.process(file, () => updatedContent);
 
 			new Notice("Transcript and summary created!");
 
@@ -227,7 +228,6 @@ class YTranslateSettingTab extends PluginSettingTab {
 	display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
-		containerEl.createEl("h2", { text: "Settings for YTranscript" });
 
 		new Setting(containerEl)
 			.setName("Timestamp interval")
@@ -270,10 +270,12 @@ class YTranslateSettingTab extends PluginSettingTab {
 					}),
 			);
 
-		containerEl.createEl("h3", { text: "OpenAI Settings" });
+		new Setting(containerEl)
+			.setName("OpenAI")
+			.setHeading();
 
 		new Setting(containerEl)
-			.setName("OpenAI API Key")
+			.setName("OpenAI API key")
 			.setDesc("Enter your OpenAI API key")
 			.addText((text) =>
 				text
@@ -286,7 +288,7 @@ class YTranslateSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("OpenAI Model")
+			.setName("OpenAI model")
 			.setDesc("Select the OpenAI model to use")
 			.addDropdown((dropdown) => {
 				dropdown
@@ -300,7 +302,7 @@ class YTranslateSettingTab extends PluginSettingTab {
 					});
 			});
 		new Setting(containerEl)
-			.setName("Custom Summary Prompt")
+			.setName("Custom summary prompt")
 			.setDesc("Enter a custom prompt to use when generating summaries. Leave empty to use the default prompt.")
 			.addTextArea((textarea) => {
 				textarea
@@ -314,7 +316,7 @@ class YTranslateSettingTab extends PluginSettingTab {
 				textarea.inputEl.cols = 50;
 			});
 		new Setting(containerEl)
-			.setName("Max Tokens")
+			.setName("Max tokens")
 			.setDesc("Maximum number of tokens to generate for the summary (1-4000)")
 			.addText((text) =>
 				text
@@ -328,7 +330,5 @@ class YTranslateSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					}),
 			);
-
-
 	}
 }

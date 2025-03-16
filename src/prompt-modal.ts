@@ -51,15 +51,15 @@ export class PromptModal extends Modal {
 
 		// Show in sidebar button
 		const sidebarButton = new ButtonComponent(buttonDiv);
-		sidebarButton.buttonEl.addClass("mod-cta");
-		sidebarButton.setButtonText("Show in Sidebar").onClick((evt: Event) => {
+		sidebarButton.setCta();
+		sidebarButton.setButtonText("Show in sidebar").onClick((evt: Event) => {
 			this.action = PromptAction.SIDEBAR;
 			this.resolveAndClose(evt);
 		});
 
 		// Create new page button
 		const newPageButton = new ButtonComponent(buttonDiv);
-		newPageButton.setButtonText("Create New Page").onClick((evt: Event) => {
+		newPageButton.setButtonText("Create new page").onClick((evt: Event) => {
 			this.action = PromptAction.NEW_PAGE;
 			this.resolveAndClose(evt);
 		});
