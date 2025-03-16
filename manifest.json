@@ -1,7 +1,7 @@
 {
 	"id": "yt-summarizer",
 	"name": "YTSummarizer",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"minAppVersion": "1.7.2",
 	"description": "Fetches YouTube transcripts and generates summaries using OpenAI GPT models",
 	"author": "Arda Kalaycı",
