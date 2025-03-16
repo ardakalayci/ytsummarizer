@@ -4,13 +4,16 @@ An Obsidian plugin that fetches YouTube transcripts and generates summaries usin
 
 ## Screenshots
 
-![YTSummarizer - Transcript View](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_1.png)
-
-![YTSummarizer - Summary Generation](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_2.png)
-
-![YTSummarizer - Settings](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_3.png)
-
-![YTSummarizer - New Note Creation](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_4.png)
+<table>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_1.png" alt="YTSummarizer - Transcript View" width="400"/></td>
+    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_2.png" alt="YTSummarizer - Summary Generation" width="400"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_3.png" alt="YTSummarizer - Settings" width="400"/></td>
+    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_4.png" alt="YTSummarizer - New Note Creation" width="400"/></td>
+  </tr>
+</table>
 
 ## Features
 - Fetch transcripts from YouTube videos
