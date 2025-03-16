@@ -2,10 +2,17 @@
 
 An Obsidian plugin that fetches YouTube transcripts and generates summaries using OpenAI GPT models.
 
-![YTSummarizer Demo](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/demo.gif)
+## Screenshots
+
+![YTSummarizer - Transcript View](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_1.png)
+
+![YTSummarizer - Summary Generation](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_2.png)
+
+![YTSummarizer - Settings](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_3.png)
+
+![YTSummarizer - New Note Creation](https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_4.png)
 
 ## Features
-
 - Fetch transcripts from YouTube videos
 - Generate summaries of video content using OpenAI GPT models
 - View transcripts in the sidebar or create new notes with transcripts and summaries
@@ -77,7 +84,7 @@ This plugin follows Obsidian's security guidelines and best practices:
 
 Many thanks to creators and contributors of following plugins:
 
-- [YTranscript](https://github.com/lstrzepek/obsidian-yt-transcript) - Bu eklenti, Łukasz Strzępek'in YTranscript eklentisinden büyük ölçüde ilham almıştır ve onun temel işlevselliği üzerine inşa edilmiştir. YTranscript, YouTube transkriptlerini alma ve görüntüleme özelliği sağlarken, YTSummarizer buna ek olarak OpenAI GPT modelleri kullanarak otomatik özet oluşturma özelliği ekler.
+- [YTranscript](https://github.com/lstrzepek/obsidian-yt-transcript) - This plugin is heavily inspired by and builds upon the YTranscript plugin by Łukasz Strzępek. While YTranscript provides functionality for fetching and displaying YouTube transcripts, YTSummarizer adds the ability to automatically generate summaries using OpenAI GPT models.
 - [Auto Link Title](https://github.com/zolrath/obsidian-auto-link-title)
 - [Timestamp Notes](https://github.com/juliang22/ObsidianTimestampNotes)
 - [Recent Files](https://github.com/tgrosinger/recent-files-obsidian)
