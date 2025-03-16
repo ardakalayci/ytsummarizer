@@ -6,12 +6,11 @@ An Obsidian plugin that fetches YouTube transcripts and generates summaries usin
 
 <table>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_1.png" alt="YTSummarizer - Transcript View" width="400"/></td>
-    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_2.png" alt="YTSummarizer - Summary Generation" width="400"/></td>
+    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_1.png" alt="YTSummarizer - Transcript View" width="400"/><br><em>Transcript View in Sidebar</em></td>
+    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_2.png" alt="YTSummarizer - Summary Generation" width="400"/><br><em>Summary Generation with OpenAI</em></td>
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_3.png" alt="YTSummarizer - Settings" width="400"/></td>
-    <td><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_4.png" alt="YTSummarizer - New Note Creation" width="400"/></td>
+    <td colspan="2" align="center"><img src="https://raw.githubusercontent.com/ardakalayci/ytsummarizer/main/assets/example_3.png" alt="YTSummarizer - Settings" width="600"/><br><em>Plugin Settings with OpenAI Configuration</em></td>
   </tr>
 </table>
 
