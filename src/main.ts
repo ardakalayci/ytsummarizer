@@ -122,7 +122,7 @@ export default class YTranscriptPlugin extends Plugin {
 			});
 
 			if (!data || !data.lines) {
-				await this.app.vault.process(file, (content) => `Failed to get transcript!\n\n[${url}](${url})`);
+				await this.app.vault.process(file, (currentContent) => `Failed to get transcript!\n\n[${url}](${url})`);
 				new Notice("Failed to get transcript!");
 				return;
 			}
@@ -146,7 +146,7 @@ export default class YTranscriptPlugin extends Plugin {
 				content += `> **[${formatTimestamp(block.quoteTimeOffset)}]** ${block.quote}\n>\n`;
 			});
 
-			await this.app.vault.process(file, () => content);
+			await this.app.vault.process(file, (currentContent) => content);
 
 			// Update file name
 			await this.app.fileManager.renameFile(file, `${fileName}`);
@@ -157,7 +157,7 @@ export default class YTranscriptPlugin extends Plugin {
 			// Show summary loading status
 			const contentWithLoadingMessage = `[${url}](${url})\n\n## Summary\n\n*Generating summary, please wait...*\n\n${content.substring(content.indexOf("## Transcript"))}`;
 
-			await this.app.vault.process(file, () => contentWithLoadingMessage);
+			await this.app.vault.process(file, (currentContent) => contentWithLoadingMessage);
 
 			// Combine transcript text
 			let transcriptText = "";
@@ -170,7 +170,7 @@ export default class YTranscriptPlugin extends Plugin {
 			const summary = await this.openaiService.generateSummary(transcriptText, data.title, url);
 
 			// Get current content
-			const currentContent = await this.app.vault.read(file);
+
 
 			// Add summary to the beginning of the file
 			let updatedContent = `[${url}](${url})\n\n`;
@@ -182,11 +182,9 @@ export default class YTranscriptPlugin extends Plugin {
 				new Notice("Failed to generate summary!");
 			}
 
-			// Add transcript section
-			updatedContent += currentContent.substring(currentContent.indexOf("## Transcript"));
-
 			// Update the file
-			await this.app.vault.process(file, () => updatedContent);
+			await this.app.vault.process(file, (currentContent) => updatedContent + currentContent.substring(currentContent.indexOf("## Transcript"))
+			);
 
 			new Notice("Transcript and summary created!");
 
